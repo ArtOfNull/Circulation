@@ -255,7 +255,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.23529412}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.49019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -292,7 +292,7 @@ GameObject:
   - component: {fileID: 339310878}
   - component: {fileID: 339310877}
   m_Layer: 5
-  m_Name: Image
+  m_Name: RedPart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -529,6 +529,7 @@ MonoBehaviour:
   - {fileID: 885201376}
   - {fileID: 1566580156}
   lastPoint: {fileID: 1566580156}
+  finished: 0
   moves: 4
 --- !u!114 &527386952
 MonoBehaviour:
@@ -543,6 +544,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movesLeftTxT: {fileID: 427966683}
+  RedPart: {fileID: 339310875}
+  BluePart: {fileID: 781451431}
 --- !u!1 &655427318
 GameObject:
   m_ObjectHideFlags: 0
@@ -596,7 +599,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.47552508, g: 0.735849, b: 0.49469522, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -727,7 +730,7 @@ GameObject:
   - component: {fileID: 781451434}
   - component: {fileID: 781451433}
   m_Layer: 5
-  m_Name: Image
+  m_Name: BluePart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1224,7 +1227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.49019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
