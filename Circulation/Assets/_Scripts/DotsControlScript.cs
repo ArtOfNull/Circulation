@@ -14,7 +14,7 @@ public class DotsControlScript : MonoBehaviour
     [SerializeField]
     public float rotationSpeed = 5f;
 
-    
+
     public Transform mainDot;
     public Transform subDot;
     float signal;
@@ -35,7 +35,10 @@ public class DotsControlScript : MonoBehaviour
     [SerializeField]
     List<PointScript> BluePoints = new List<PointScript>();
     List<int> curWays;
+    [SerializeField]
+    PointScript nextPoint;
     public PointScript curPoint;
+    public PointScript startingPoint;
     public int counter = 0;
     bool moving = false;
     float savedSig = 0f;
@@ -44,10 +47,12 @@ public class DotsControlScript : MonoBehaviour
     public bool finished = false;
 
     public int moves;
+    [SerializeField]
+    public Dictionary<(DotState,int),DotState> Roots = new Dictionary<(DotState, int), DotState>();
 
     public void swapDotControl()
     {
-        if(state)
+        if (state)
         {
             BlueDot.transform.SetParent(null);
             RedDot.transform.SetParent(BlueDot.transform);
@@ -78,60 +83,43 @@ public class DotsControlScript : MonoBehaviour
         mainDot = BlueDot.transform;
         subDot = RedDot.transform;
         curWays = RedWays;
-        curPoint = RedPoints[0];
+        curPoint = startingPoint;
         UIC = GetComponent<UIcontrollerScrpit>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.S))
         {
             //swapDotControl();
         }
         signal = Input.GetAxisRaw("Horizontal");
-        if ((signal == curWays[counter] || (curWays[counter] == 2 && signal != 0)) && !moving && !finished && moves>0)
+        if(!moving) nextPoint = curPoint.returnPoint(signal);
+        if (nextPoint != null && !moving && !finished && moves > 0)
         {
             savedSig = signal;
             moving = true;
             moves--;
-
-            if (!state)
-            {
-                foreach (PointScript poi in RedPoints)
-                {
-                    if (signal == poi.signal && poi.id-1 == counter)
-                    {
-                        curPoint = poi;
-                        break;
-                    }
-
-                }
-            }          
-            else
-            {
-                foreach (PointScript poi in BluePoints)
-                {
-                    if (signal == poi.signal && poi.id-1 == counter)
-                    {
-                        curPoint = poi;
-                        break;
-                    }
-
-                }
-            }
-
         }
         if (moving)
         {
             mainDot.transform.Rotate(Vector3.back * savedSig * rotationSpeed * Time.deltaTime);
-            if (Vector2.Distance(subDot.position, curPoint.gameObject.transform.position)<=0.5f)
+            if (Vector2.Distance(subDot.position, nextPoint.gameObject.transform.position) <= 0.5f)
             {
                 moving = false;
-                subDot.position = curPoint.gameObject.transform.position;
-                if(curPoint != lastPoint)
+                subDot.position = nextPoint.gameObject.transform.position;
+                if (nextPoint.isStop)
                 {
-                    if (mainDot == RedDot.transform) counter++;                    
+                    StopPointScript SP = nextPoint.GetComponent<StopPointScript>();
+                    SP.changePoints(curPoint);
+                    SP.destroyStop();
+                }
+                if (nextPoint != lastPoint)
+                {
+                    if (mainDot == RedDot.transform) counter++;
+                    curPoint = nextPoint;
+                    nextPoint = null;
                     swapDotControl();
                 }
                 else
@@ -139,7 +127,7 @@ public class DotsControlScript : MonoBehaviour
                     print("Bababooey");
                     finished = true;
                 }
-               
+
             }
 
         }
@@ -149,5 +137,14 @@ public class DotsControlScript : MonoBehaviour
         //cameraChanger += cameraSpeed * camChModifier * Time.deltaTime;
         //Vector2 newCamPos = Vector2.Lerp(RedDot.transform.position, BlueDot.transform.position, cameraChanger);
         //Camera.main.transform.position = new Vector3(newCamPos.x, newCamPos.y, Camera.main.transform.position.z) + offset;
+    }
+
+    void initLevel3()
+    {
+        DotState d00r = new DotState("b0", "r0", false);
+        DotState d01b = new DotState("b0", "r1", true);
+        DotState d02b = new DotState("b0", "r2", true);
+        Roots.Add((d00r, 0), d01b);
+        Roots.Add((d00r, 1), d02b);
     }
 }
