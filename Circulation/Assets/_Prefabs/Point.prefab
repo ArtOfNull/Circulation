@@ -10,10 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4563947810646887624}
   - component: {fileID: 3079559220614315098}
-  m_Layer: 0
+  - component: {fileID: 18646388817139812}
+  m_Layer: 6
   m_Name: Point
   m_TagString: Untagged
-  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -47,4 +48,26 @@ MonoBehaviour:
   isBlue: 0
   isStop: 0
   nextRight: {fileID: 0}
+  rightNextDots:
+  - {fileID: 0}
+  - {fileID: 0}
+  leftNextDots:
+  - {fileID: 0}
+  - {fileID: 0}
   nextLeft: {fileID: 0}
+--- !u!58 &18646388817139812
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4563947810646887627}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5

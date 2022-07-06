@@ -27,28 +27,25 @@ public class DotsControlScript : MonoBehaviour
     bool isCamMove = false;
     public Vector3 offset = new Vector3(0f, -1.5f, 0f);
     [SerializeField]
-    List<int> RedWays = new List<int>();
-    [SerializeField]
-    List<PointScript> RedPoints = new List<PointScript>();
-    [SerializeField]
-    List<int> BlueWays = new List<int>();
-    [SerializeField]
-    List<PointScript> BluePoints = new List<PointScript>();
-    List<int> curWays;
-    [SerializeField]
-    PointScript nextPoint;
-    public PointScript curPoint;
-    public PointScript startingPoint;
+    public GameObject curPoint;
     public int counter = 0;
     bool moving = false;
     float savedSig = 0f;
     [SerializeField]
     PointScript lastPoint;
     public bool finished = false;
-
+    public DotScript curDotS;
     public int moves;
     [SerializeField]
-    public Dictionary<(DotState,int),DotState> Roots = new Dictionary<(DotState, int), DotState>();
+    float tempRot;
+    [SerializeField]
+    string blueTag;
+    [SerializeField]
+    string redTag;
+    [SerializeField]
+    string curTag;
+    int checker = 0;
+
 
     public void swapDotControl()
     {
@@ -58,7 +55,10 @@ public class DotsControlScript : MonoBehaviour
             RedDot.transform.SetParent(BlueDot.transform);
             mainDot = BlueDot.transform;
             subDot = RedDot.transform;
-            curWays = RedWays;
+            curTag = redTag;
+            curDotS = subDot.GetComponent<DotScript>();
+            Collider2D overCall = Physics2D.OverlapPoint(curDotS.edgePoints[0] + subDot.position, 1 << 6);
+            if (overCall != null) curPoint = overCall.gameObject;
             state = !state;
             cameraChanger = 0f;
             camChModifier = 1;
@@ -70,7 +70,10 @@ public class DotsControlScript : MonoBehaviour
             BlueDot.transform.SetParent(RedDot.transform);
             mainDot = RedDot.transform;
             subDot = BlueDot.transform;
-            curWays = BlueWays;
+            curTag = blueTag;
+            curDotS = subDot.GetComponent<DotScript>();
+            Collider2D overCall = Physics2D.OverlapPoint(curDotS.edgePoints[0] + subDot.position, 1 << 6);
+            if (overCall != null) curPoint = overCall.gameObject;
             state = !state;
             cameraChanger = 1f;
             camChModifier = -1;
@@ -82,8 +85,10 @@ public class DotsControlScript : MonoBehaviour
     {
         mainDot = BlueDot.transform;
         subDot = RedDot.transform;
-        curWays = RedWays;
-        curPoint = startingPoint;
+        curTag = redTag;
+        curDotS = subDot.GetComponent<DotScript>();
+        Collider2D overCall = Physics2D.OverlapPoint(curDotS.edgePoints[0] + subDot.position, 1 << 6);
+        if(overCall!=null) curPoint = overCall.gameObject;
         UIC = GetComponent<UIcontrollerScrpit>();
     }
 
@@ -95,31 +100,45 @@ public class DotsControlScript : MonoBehaviour
             //swapDotControl();
         }
         signal = Input.GetAxisRaw("Horizontal");
-        if(!moving) nextPoint = curPoint.returnPoint(signal);
-        if (nextPoint != null && !moving && !finished && moves > 0)
+        if (signal != 0 && !moving && !finished && moves > 0)
         {
             savedSig = signal;
             moving = true;
-            moves--;
+            tempRot = mainDot.transform.rotation.eulerAngles.z;
         }
         if (moving)
         {
             mainDot.transform.Rotate(Vector3.back * savedSig * rotationSpeed * Time.deltaTime);
-            if (Vector2.Distance(subDot.position, nextPoint.gameObject.transform.position) <= 0.5f)
+            Collider2D overCall = Physics2D.OverlapPoint(curDotS.edgePoints[0]+subDot.position, 1 << 6);
+            if (!curDotS.isOnLevel)
             {
+                checker++;
+                
+            }
+            else
+            {
+                checker = 0;
+            }
+            if(checker == 3)
+            {
+                mainDot.gameObject.transform.eulerAngles = new Vector3(mainDot.transform.rotation.eulerAngles.x, mainDot.transform.rotation.eulerAngles.y, tempRot);
                 moving = false;
-                subDot.position = nextPoint.gameObject.transform.position;
-                if (nextPoint.isStop)
+                checker = 0;
+            }
+            if (overCall!=null && overCall.gameObject.tag == curTag && overCall.gameObject != curPoint)
+            {
+                PointScript temp = overCall.gameObject.GetComponent<PointScript>();
+                moving = false;
+                moves--;
+                subDot.position = temp.gameObject.transform.position;
+                if (temp.isStop)
                 {
-                    StopPointScript SP = nextPoint.GetComponent<StopPointScript>();
-                    SP.changePoints(curPoint);
+                    StopPointScript SP = temp.GetComponent<StopPointScript>();
                     SP.destroyStop();
                 }
-                if (nextPoint != lastPoint)
+                if (temp != lastPoint)
                 {
                     if (mainDot == RedDot.transform) counter++;
-                    curPoint = nextPoint;
-                    nextPoint = null;
                     swapDotControl();
                 }
                 else
@@ -132,19 +151,11 @@ public class DotsControlScript : MonoBehaviour
 
         }
 
-        print(signal);
         // mainDot.transform.Rotate(Vector3.back * signal * rotationSpeed * Time.deltaTime);
         //cameraChanger += cameraSpeed * camChModifier * Time.deltaTime;
         //Vector2 newCamPos = Vector2.Lerp(RedDot.transform.position, BlueDot.transform.position, cameraChanger);
         //Camera.main.transform.position = new Vector3(newCamPos.x, newCamPos.y, Camera.main.transform.position.z) + offset;
     }
 
-    void initLevel3()
-    {
-        DotState d00r = new DotState("b0", "r0", false);
-        DotState d01b = new DotState("b0", "r1", true);
-        DotState d02b = new DotState("b0", "r2", true);
-        Roots.Add((d00r, 0), d01b);
-        Roots.Add((d00r, 1), d02b);
-    }
+    
 }

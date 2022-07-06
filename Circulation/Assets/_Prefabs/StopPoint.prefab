@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 966099288128848926}
   - component: {fileID: 966099288128848924}
   - component: {fileID: 966099288128848927}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,8 @@ GameObject:
   m_Component:
   - component: {fileID: 966099289260561271}
   - component: {fileID: 7594297732936821425}
-  m_Layer: 0
+  - component: {fileID: 2021430566377806931}
+  m_Layer: 6
   m_Name: StopPoint
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
@@ -100,7 +101,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 966099289597423411}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 2.4, z: -3.7868981}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -122,11 +123,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBlue: 0
-  isStop: 0
+  isStop: 1
   nextRight: {fileID: 0}
+  rightNextDots:
+  - {fileID: 0}
+  - {fileID: 0}
+  leftNextDots:
+  - {fileID: 0}
+  - {fileID: 0}
   nextLeft: {fileID: 0}
   afterStopRightPoint: {fileID: 0}
   afterStopLeftPoint: {fileID: 0}
+--- !u!58 &2021430566377806931
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 966099289597423411}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!1 &966099289717365062
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,7 +162,7 @@ GameObject:
   - component: {fileID: 966099289717365058}
   - component: {fileID: 966099289717365061}
   - component: {fileID: 966099289717365060}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -164,7 +187,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.09}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &966099289717365058

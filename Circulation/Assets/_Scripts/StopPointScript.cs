@@ -25,9 +25,5 @@ public class StopPointScript : PointScript
         base.destroyStop();
     }
 
-    public void changePoints(PointScript curP)
-    {
-        if (afterStopRightPoint != null) curP.nextRight = afterStopRightPoint;
-        if (afterStopLeftPoint != null) curP.nextLeft = afterStopLeftPoint;
-    }
+
 }
