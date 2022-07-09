@@ -10,15 +10,28 @@ public class UIcontrollerScrpit : MonoBehaviour
     Text movesLeftTxT;
 
     [SerializeField]
-    GameObject RedPart;
+    Image invalidMoveImg;
     [SerializeField]
-    GameObject BluePart;
+    Text invalidMoveTxt;
+    [SerializeField]
+    float invMoveStayDur = 2f;
+    [SerializeField]
+    float fadingSpeed = 0.5f;
+    Color invMoveImgCol;
+    Color invMoveTxtCol;
+    int InvMoveState;
+    float invMoveStayTemp;
+
+
+    [SerializeField]
+    GameObject LevelFinishPanel;
     // Start is called before the first frame update
     void Start()
     {
-        //BluePart.SetActive(false);
-        //RedPart.SetActive(true);
+
         DC = GetComponent<DotsControlScript>();
+        invMoveImgCol = invalidMoveImg.color; 
+        invMoveTxtCol = invalidMoveTxt.color;
     }
 
     // Update is called once per frame
@@ -26,25 +39,70 @@ public class UIcontrollerScrpit : MonoBehaviour
     {
 
         movesLeftTxT.text = "Moves left: " + DC.moves.ToString();
-        /*if(DC.finished)
-        {
-            BluePart.SetActive(true);
-            RedPart.SetActive(true);
-        }*/
-        
+        invalidMoveImgFading();
+
+
     }
 
-    public void setPartsActive()
+    public void invalidMoveUIset()
     {
-        /*if (DC.state)
+        invalidMoveImg.gameObject.SetActive(true);
+        invMoveImgCol.a = 0.9f;
+        invalidMoveImg.color = invMoveImgCol;
+        invMoveTxtCol.a = 1f;
+        invalidMoveTxt.color = invMoveTxtCol;
+        InvMoveState = 1;
+
+    }
+
+    void invalidMoveImgFading()
+    {
+        switch(InvMoveState)
         {
-            BluePart.SetActive(true);
-            RedPart.SetActive(false);
+            case 0:
+                {
+
+                }break;
+
+            case 1:
+                {
+                    invMoveStayTemp = invMoveStayDur;
+                    InvMoveState = 2;
+                }break;
+
+            case 2:
+                {
+                    if(invMoveStayTemp>0)
+                    {
+                        invMoveStayTemp -= Time.deltaTime;
+                    }
+                    else
+                    {
+                        InvMoveState = 3;
+                    }
+                }break;
+
+            case 3:
+                {
+                    if(invMoveTxtCol.a>0)
+                    {
+                        invMoveTxtCol.a -= fadingSpeed * Time.deltaTime;
+                        invalidMoveTxt.color = invMoveTxtCol;
+                        invMoveImgCol.a -= fadingSpeed * Time.deltaTime;
+                        invalidMoveImg.color = invMoveImgCol;
+                    }
+                    else
+                    {
+                        invalidMoveImg.gameObject.SetActive(false);
+                        InvMoveState = 0;
+                    }
+                }break;
         }
-        else
-        {
-            BluePart.SetActive(false);
-            RedPart.SetActive(true);
-        }*/
+
+    }   
+    
+    public void FinishLevel()
+    {
+        LevelFinishPanel.SetActive(true);
     }
 }

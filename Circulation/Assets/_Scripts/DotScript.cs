@@ -10,11 +10,13 @@ public class DotScript : MonoBehaviour
     float _colRad;
     public bool isOnLevel => CheckIfOnLevel();
     // Start is called before the first frame update
-    void Start()
+
+    private void Awake()
     {
         _colRad = GetComponent<CircleCollider2D>().radius;
         SetupEdge();
     }
+
 
     // Update is called once per frame
     void Update()

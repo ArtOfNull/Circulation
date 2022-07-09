@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DotsControlScript : MonoBehaviour
 {
+    [SerializeField]
     UIcontrollerScrpit UIC;
     [SerializeField]
     GameObject RedDot;
@@ -46,6 +48,12 @@ public class DotsControlScript : MonoBehaviour
     string curTag;
     int checker = 0;
 
+    AudioSource source;
+
+    [SerializeField] string ThisLevelName;
+    [SerializeField] string NextLevelName;
+
+    [SerializeField] GameObject Menu;
 
     public void swapDotControl()
     {
@@ -62,7 +70,6 @@ public class DotsControlScript : MonoBehaviour
             state = !state;
             cameraChanger = 0f;
             camChModifier = 1;
-            UIC.setPartsActive();
         }
         else
         {
@@ -77,7 +84,6 @@ public class DotsControlScript : MonoBehaviour
             state = !state;
             cameraChanger = 1f;
             camChModifier = -1;
-            UIC.setPartsActive();
         }
     }
     // Start is called before the first frame update
@@ -90,15 +96,19 @@ public class DotsControlScript : MonoBehaviour
         Collider2D overCall = Physics2D.OverlapPoint(curDotS.edgePoints[0] + subDot.position, 1 << 6);
         if(overCall!=null) curPoint = overCall.gameObject;
         UIC = GetComponent<UIcontrollerScrpit>();
+        source = GetComponent<AudioSource>();  
     }
+
+    
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            //swapDotControl();
+            PauseMenu();
         }
+        if (Menu.activeSelf) return;
         signal = Input.GetAxisRaw("Horizontal");
         if (signal != 0 && !moving && !finished && moves > 0)
         {
@@ -123,6 +133,7 @@ public class DotsControlScript : MonoBehaviour
             {
                 mainDot.gameObject.transform.eulerAngles = new Vector3(mainDot.transform.rotation.eulerAngles.x, mainDot.transform.rotation.eulerAngles.y, tempRot);
                 moving = false;
+                UIC.invalidMoveUIset();
                 checker = 0;
             }
             if (overCall!=null && overCall.gameObject.tag == curTag && overCall.gameObject != curPoint)
@@ -144,8 +155,12 @@ public class DotsControlScript : MonoBehaviour
                 else
                 {
                     print("Bababooey");
+                    source.Play();
+                    UIC.FinishLevel();
                     finished = true;
                 }
+                AudioSource Clicksource = subDot.GetComponent<AudioSource>();
+                Clicksource.Play();
 
             }
 
@@ -155,6 +170,31 @@ public class DotsControlScript : MonoBehaviour
         //cameraChanger += cameraSpeed * camChModifier * Time.deltaTime;
         //Vector2 newCamPos = Vector2.Lerp(RedDot.transform.position, BlueDot.transform.position, cameraChanger);
         //Camera.main.transform.position = new Vector3(newCamPos.x, newCamPos.y, Camera.main.transform.position.z) + offset;
+    }
+
+    public void Retry()
+    {
+        SceneManager.LoadScene(ThisLevelName);
+    }
+
+    public void NextLevel()
+    {
+        SceneManager.LoadScene(NextLevelName);
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    void PauseMenu()
+    {
+        Menu.SetActive(!Menu.activeSelf);
     }
 
     
