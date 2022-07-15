@@ -21,10 +21,13 @@ public class UIcontrollerScrpit : MonoBehaviour
     Color invMoveTxtCol;
     int InvMoveState;
     float invMoveStayTemp;
-
+    public GameObject TutorPal;
 
     [SerializeField]
     GameObject LevelFinishPanel;
+
+    public GameObject RedText;
+    public GameObject BlueText;
     // Start is called before the first frame update
     void Start()
     {
@@ -104,5 +107,10 @@ public class UIcontrollerScrpit : MonoBehaviour
     public void FinishLevel()
     {
         LevelFinishPanel.SetActive(true);
+    }
+
+    public void offTutor()
+    {
+        if (TutorPal != null) TutorPal.SetActive(false);
     }
 }

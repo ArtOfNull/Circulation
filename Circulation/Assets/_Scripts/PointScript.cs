@@ -8,7 +8,7 @@ public class PointScript : MonoBehaviour
 {
     public bool isBlue = false;
     public bool isStop = false;
-
+    public bool isSwitch = false;
     // Start is called before the first frame update
     void Start()
     {

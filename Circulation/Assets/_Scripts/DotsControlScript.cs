@@ -47,7 +47,7 @@ public class DotsControlScript : MonoBehaviour
     [SerializeField]
     string curTag;
     int checker = 0;
-
+    bool tempBool= false;
     AudioSource source;
 
     [SerializeField] string ThisLevelName;
@@ -62,6 +62,8 @@ public class DotsControlScript : MonoBehaviour
             BlueDot.transform.SetParent(null);
             RedDot.transform.SetParent(BlueDot.transform);
             mainDot = BlueDot.transform;
+            UIC.RedText.SetActive(true);
+            UIC.BlueText.SetActive(false);
             subDot = RedDot.transform;
             curTag = redTag;
             curDotS = subDot.GetComponent<DotScript>();
@@ -75,7 +77,9 @@ public class DotsControlScript : MonoBehaviour
         {
             RedDot.transform.SetParent(null);
             BlueDot.transform.SetParent(RedDot.transform);
-            mainDot = RedDot.transform;
+            mainDot = RedDot.transform;          
+            UIC.RedText.SetActive(false);
+            UIC.BlueText.SetActive(true);
             subDot = BlueDot.transform;
             curTag = blueTag;
             curDotS = subDot.GetComponent<DotScript>();
@@ -108,7 +112,9 @@ public class DotsControlScript : MonoBehaviour
         {
             PauseMenu();
         }
-        if (Menu.activeSelf) return;
+        if (UIC.TutorPal != null) tempBool = UIC.TutorPal.activeSelf;
+        else tempBool = false;
+        if (Menu.activeSelf || tempBool) return;
         signal = Input.GetAxisRaw("Horizontal");
         if (signal != 0 && !moving && !finished && moves > 0)
         {
@@ -146,6 +152,11 @@ public class DotsControlScript : MonoBehaviour
                 {
                     StopPointScript SP = temp.GetComponent<StopPointScript>();
                     SP.destroyStop();
+                }
+                if (temp.isSwitch)
+                {
+                    SwitchPointScript SP = temp.GetComponent<SwitchPointScript>();
+                    SP.ChangeMap();
                 }
                 if (temp != lastPoint)
                 {
