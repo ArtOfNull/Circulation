@@ -5,21 +5,22 @@ using UnityEngine.SceneManagement;
 
 public class StartMenuScript : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public GameObject selectLevelPan;
+    public GameObject creditPan;
 
     public void StartGame()
     {
         SceneManager.LoadScene("Level0");
+    }
+
+    public void SelectLevel()
+    {
+        selectLevelPan.SetActive(true);
+    }
+
+    public void Credits()
+    {
+        creditPan.SetActive(true);
     }
 
     public void QuitGame()
